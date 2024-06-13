@@ -31,14 +31,25 @@ class DatabaseModel:
                 ON к.id_организатора = о.id_организатора
         """)
 
-    def find_conference(self, conf_id):
+    def update_conferences(self, conf_id, organizer_id, conf_name, status, conf_date, cooperator):
         return self.fetch("""
-            SELECT к.id_конференции, к.название, о.название, к.статус, к.дата_начала, к.организатор
-            FROM конференции к
-            JOIN организаторы о
-                ON к.id_организатора = о.id_организатора
-            WHERE к.id_конференции = %s
-        """, (conf_id, ))
+            UPDATE конференции SET
+                id_организатора = %s,
+                название = %s,
+                статус = %s,
+                дата_начала = %s,
+                организатор = %s
+            WHERE id_конференции = %s
+        """, (organizer_id, conf_name, status, conf_date, cooperator, conf_id))
+
+    # def find_conference(self, conf_id):
+    #     return self.fetch("""
+    #         SELECT к.id_конференции, к.название, о.название, к.статус, к.дата_начала, к.организатор
+    #         FROM конференции к
+    #         JOIN организаторы о
+    #             ON к.id_организатора = о.id_организатора
+    #         WHERE к.id_конференции = %s
+    #     """, (conf_id, ))
 
     def get_organizers(self):
         return self.fetch("""
@@ -52,6 +63,12 @@ class DatabaseModel:
             VALUES (%s, %s, %s, %s, %s)
         """, (organizer_id, conf_name, conf_status, conf_date, conf_organizer))
         return self.get_last_insert_id()
+
+    def delete_conferences_by_ids(self, record_ids):
+        query = "DELETE FROM конференции WHERE id_конференции IN ({})".format(
+            ', '.join(['%s'] * len(record_ids))
+        )
+        self.execute(query, record_ids)
 
     def get_last_insert_id(self):
         return self.fetch("""

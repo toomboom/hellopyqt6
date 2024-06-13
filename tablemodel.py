@@ -47,3 +47,7 @@ class ConferencesTableModel(QAbstractTableModel):
         self._data.sort(key=lambda x: x[column], reverse=order == Qt.SortOrder.DescendingOrder)
         self.layoutChanged.emit()
 
+    def get_selected_rows(self, selection_model):
+        selected_indexes = selection_model.selectedRows()
+        return [self._data[index.row()] for index in selected_indexes]
+

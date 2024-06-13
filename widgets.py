@@ -1,4 +1,4 @@
-from PyQt6.QtCore import QDateTime
+from PyQt6.QtCore import QDateTime, QDate
 from PyQt6.QtWidgets import QDateEdit, QComboBox, QWidget, QVBoxLayout, QLabel, QLineEdit, QTableView, QHeaderView, \
     QMessageBox
 
@@ -13,6 +13,9 @@ class DateEdit(QDateEdit):
     def data(self):
         return self.date().toString('yyyy-MM-dd')
 
+    def set(self, value):
+        self.setDate(QDate.fromString(value.strftime("%d.%m.%Y"), "dd.MM.yyyy"))
+
 
 class LineEdit(QLineEdit):
     def __init__(self, parent=None):
@@ -20,6 +23,10 @@ class LineEdit(QLineEdit):
 
     def data(self):
         return self.text()
+
+    def set(self, value):
+        self.setText(value)
+
 
 class ComboBox(QComboBox):
     def __init__(self, data, parent=None):
@@ -30,20 +37,21 @@ class ComboBox(QComboBox):
     def data(self):
         return self.currentData()
 
+    def set(self, value):
+        self.setCurrentText(value)
+
+
 class InputWidget(QWidget):
-    def __init__(self, labelName, inputWidget, parent=None):
+    def __init__(self, labelName, input, parent=None):
         super().__init__(parent)
         self.label = QLabel(labelName)
-        self.inputWidget = inputWidget
+        self.input = input
 
         layout = QVBoxLayout()
         layout.addWidget(self.label)
-        layout.addWidget(self.inputWidget)
+        layout.addWidget(self.input)
 
         self.setLayout(layout)
-
-    def data(self):
-        return self.inputWidget.data()
 
 
 class TableView(QTableView):
@@ -80,7 +88,3 @@ class TableView(QTableView):
             QMessageBox.StandardButton.No)
 
         return reply == QMessageBox.StandardButton.Yes
-
-    def get_selected_rows(self):
-        selected_indexes = self.selectionModel().selectedRows()
-        return [index.row() for index in selected_indexes]
