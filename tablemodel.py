@@ -1,0 +1,49 @@
+from PyQt6.QtCore import QAbstractTableModel, Qt, QModelIndex
+from datetime import date
+
+
+class ConferencesTableModel(QAbstractTableModel):
+    def __init__(self, data):
+        super().__init__()
+        self._headers = ["ID Конференции", "Конференция", "Организатор", "Статус", "Дата начала", "Координатор"]
+        self._data = data
+        self.sort(0)
+
+    def data(self, index, role=Qt.ItemDataRole.DisplayRole):
+        if role == Qt.ItemDataRole.DisplayRole:
+            value = self._data[index.row()][index.column()]
+            if isinstance(value, float):
+                return "%.2f" % value
+            elif isinstance(value, date):
+                return value.strftime("%d.%m.%Y")
+            return value
+
+    def headerData(self, section, orientation, role):
+        if role == Qt.ItemDataRole.DisplayRole and orientation == Qt.Orientation.Horizontal:
+            return self._headers[section]
+
+    def delete_rows(self, row_ids):
+        row_ids_set = set(row_ids)
+        for row_index in range(len(self._data) - 1, -1, -1):
+            if self._data[row_index][0] in row_ids_set:
+                self.beginRemoveRows(QModelIndex(), row_index, row_index)
+                del self._data[row_index]
+                self.endRemoveRows()
+
+    def rowCount(self, index=QModelIndex()):
+        return len(self._data)
+
+    def columnCount(self, index=QModelIndex()):
+        return len(self._headers)
+
+    def appendRow(self, data, parent=QModelIndex()):
+        position = self.rowCount(parent)
+        self.beginInsertRows(parent, position, position)
+        self._data.append(data)
+        self.endInsertRows()
+
+    def sort(self, column, order=Qt.SortOrder.AscendingOrder):
+        self.layoutAboutToBeChanged.emit()
+        self._data.sort(key=lambda x: x[column], reverse=order == Qt.SortOrder.DescendingOrder)
+        self.layoutChanged.emit()
+

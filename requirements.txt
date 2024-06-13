@@ -1,0 +1,2 @@
+pyqt6~=6.7.0
+mysql-connector
