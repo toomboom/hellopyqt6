@@ -31,8 +31,8 @@ class DatabaseModel:
                 ON к.id_организатора = о.id_организатора
         """)
 
-    def update_conferences(self, conf_id, organizer_id, conf_name, status, conf_date, cooperator):
-        return self.fetch("""
+    def update_conference(self, conf_id, organizer_id, conf_name, status, conf_date, cooperator):
+        self.execute("""
             UPDATE конференции SET
                 id_организатора = %s,
                 название = %s,
@@ -41,15 +41,6 @@ class DatabaseModel:
                 организатор = %s
             WHERE id_конференции = %s
         """, (organizer_id, conf_name, status, conf_date, cooperator, conf_id))
-
-    # def find_conference(self, conf_id):
-    #     return self.fetch("""
-    #         SELECT к.id_конференции, к.название, о.название, к.статус, к.дата_начала, к.организатор
-    #         FROM конференции к
-    #         JOIN организаторы о
-    #             ON к.id_организатора = о.id_организатора
-    #         WHERE к.id_конференции = %s
-    #     """, (conf_id, ))
 
     def get_organizers(self):
         return self.fetch("""

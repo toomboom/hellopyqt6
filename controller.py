@@ -13,18 +13,21 @@ class Controller:
 
     def edit_conf(self):
         dialog = self.view.edit_dialog
-        # try:
-        if not dialog.exec():
-            return
-        data = dialog.get_data()
+        try:
+            if not dialog.exec():
+                return
+            data = dialog.get_data()
 
-            # self.model.update_conference(
-            #     data["conf_id"], data["organizer_id"], data["conf_name"],
-            #     data["conf_status"], data["conf_date"], data["conf_organizer"]
-            # )
-            # self.table_model.appendRow(self.model.find_conference(record_id)[0])
-        # except Exception as e:
-        #     self.view.show_error(str(e))
+            self.model.update_conference(
+                data["conf_id"], data["organizer_id"], data["conf_name"],
+                data["conf_status"], data["conf_date"], data["cooperator"]
+            )
+            self.table_model.update_row_by_id((
+                data["conf_id"], data["organizer_name"], data["conf_name"],
+                data["conf_status"], data["conf_date"], data["cooperator"]
+            ))
+        except Exception as e:
+            self.view.show_error(str(e))
 
     def add_conf(self):
         try:

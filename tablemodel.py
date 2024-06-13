@@ -51,3 +51,29 @@ class ConferencesTableModel(QAbstractTableModel):
         selected_indexes = selection_model.selectedRows()
         return [self._data[index.row()] for index in selected_indexes]
 
+
+    # def update_row_by_id(self, record_id, new_values):
+    #     row_index = next((index for (index, d) in enumerate(self._data) if d[0] == record_id), None)
+    #     if row_index is not None:
+    #         updated_row = new_values
+    #         self._data[row_index] = updated_row
+    #         self.dataChanged.emit(self.index(row_index, 0), self.index(row_index, len(new_values) - 1))
+
+    # def update_row_by_id(self, record_id, values):
+    #     row_to_update = next((index for index, row in enumerate(self._data) if row[0] == record_id), None)
+    #     if row_to_update is not None:
+    #         for col, value in enumerate(values):
+    #             self._data[row_to_update][col] = value
+    #
+    #         self.dataChanged.emit(self.createIndex(row_to_update, 0), self.createIndex(row_to_update, len(values) - 1))
+    #         return True
+    #     return False
+
+    def update_row_by_id(self, values):
+        record_id = values[0]
+        row_to_update = next((index for index, row in enumerate(self._data) if row[0] == record_id), None)
+        if row_to_update is not None:
+            self._data[row_to_update] = values
+            self.dataChanged.emit(self.createIndex(row_to_update, 0), self.createIndex(row_to_update, len(values) - 1))
+            return True
+        return False
