@@ -1,3 +1,4 @@
+from PyQt6.QtGui import QPalette, QColor
 from PyQt6.QtWidgets import QMainWindow, QVBoxLayout, QWidget, QMessageBox, QHBoxLayout, QPushButton
 from dialog import AddDialog, EditDialog
 from widgets import TableView
@@ -23,6 +24,7 @@ class View(QMainWindow):
         container = QWidget()
         container.setLayout(layout)
         self.setCentralWidget(container)
+        self.set_green_theme()
 
     def init_table(self, layout):
         self.table = TableView()
@@ -40,6 +42,14 @@ class View(QMainWindow):
         buttonsLayout.addWidget(self.editButton)
         buttonsLayout.addWidget(self.deleteButton)
         layout.addLayout(buttonsLayout)
+
+    def set_green_theme(self):
+        palette = QPalette()
+        palette.setColor(QPalette.ColorRole.Window, QColor('lightgreen'))
+        palette.setColor(QPalette.ColorRole.Button, QColor('lightgreen'))
+        palette.setColor(QPalette.ColorRole.Text, QColor('white'))
+        palette.setColor(QPalette.ColorRole.Base, QColor('lightgreen'))
+        self.setPalette(palette)
 
     def set_table_model(self, model):
         self.table.setModel(model)

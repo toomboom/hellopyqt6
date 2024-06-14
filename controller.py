@@ -23,7 +23,7 @@ class Controller:
                 data["conf_status"], data["conf_date"], data["cooperator"]
             )
             self.table_model.update_row_by_id((
-                data["conf_id"], data["organizer_name"], data["conf_name"],
+                data["conf_id"], data["conf_name"], data["organizer_name"],
                 data["conf_status"], data["conf_date"], data["cooperator"]
             ))
         except Exception as e:

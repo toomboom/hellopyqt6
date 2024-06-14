@@ -1,3 +1,5 @@
+from datetime import date
+
 from PyQt6.QtCore import QDateTime, QDate
 from PyQt6.QtWidgets import QDateEdit, QComboBox, QWidget, QVBoxLayout, QLabel, QLineEdit, QTableView, QHeaderView, \
     QMessageBox
@@ -11,10 +13,11 @@ class DateEdit(QDateEdit):
         self.setDateTime(QDateTime.currentDateTime())
 
     def data(self):
-        return self.date().toString('yyyy-MM-dd')
+        qtdate = self.date()
+        return date.fromisoformat(qtdate.toString('yyyy-MM-dd'))
 
     def set(self, value):
-        self.setDate(QDate.fromString(value.strftime("%d.%m.%Y"), "dd.MM.yyyy"))
+        self.setDate(QDate.fromString(value.strftime("%Y-%m-%d"), "yyyy-MM-dd"))
 
 
 class LineEdit(QLineEdit):
@@ -63,20 +66,26 @@ class TableView(QTableView):
         self.horizontalHeader().setSectionResizeMode(QHeaderView.ResizeMode.Stretch)
         self.verticalHeader().setSectionResizeMode(QHeaderView.ResizeMode.ResizeToContents)
         self.setSelectionBehavior(QTableView.SelectionBehavior.SelectRows)
+        self.verticalHeader().setVisible(False)
         self.setStyleSheet("""
             QTableView {
-                selection-background-color: #D3D3D3;
-                selection-color: black;
+                background-color: #FFFFFF;
+                color: #000000;
+                gridline-color: #99CC99;
             }
             QHeaderView::section {
-                background-color: #F0F0F0;
+                background-color: #99CC99;
                 padding: 4px;
-                border: 1px solid #D3D3D3;
+                border: 1px solid #66CC66;
                 font-size: 10pt;
             }
             QTableView::item {
                 padding: 4px;
-                border: 1px solid #D3D3D3;
+                border: 1px solid #66CC66;
+            }
+            QTableView::item:selected {
+                background-color: #E6FFE6;
+                color: #003300;
             }
         """)
 
