@@ -54,6 +54,7 @@ class AddDialog(QDialog):
 class EditDialog(AddDialog):
     def __init__(self, controller, parent=None):
         super().__init__(controller, parent)
+        self.setWindowTitle('Редактирование конференции')
         self.conf_id = None
 
     def set_data(self, name, organizer, status, date, cooperator):
